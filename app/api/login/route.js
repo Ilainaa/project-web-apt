@@ -12,7 +12,12 @@ export async function POST(request) {
   );
 
   if (rows.length > 0) {
-    return NextResponse.json({ success: true, user: rows[0] });
+    const user = rows[0]
+
+    return NextResponse.json({
+      success: true,
+      isAdmin: user.username === 'admin', // <-- ตรวจตรงนี้
+    })
   } else {
     return NextResponse.json({ success: false, message: 'Invalid credentials' });
   }

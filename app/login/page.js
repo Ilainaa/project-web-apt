@@ -21,8 +21,11 @@ export default function LoginPage() {
     const result = await res.json()
 
     if (result.success) {
-      // ✅ Login สำเร็จ - redirect ไปหน้าหลัก
-      router.push('/')
+      if (result.isAdmin) {
+        router.push('/admin')
+      } else {
+        router.push('/')
+      }
     } else {
       setError('Username หรือ Password ไม่ถูกต้อง')
     }
