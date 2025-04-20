@@ -45,7 +45,7 @@
   }
   
   .boxroom {
-    width: 150px;
+    width: 145px;
     height: 100px;
     border: 1px solid;
     background-color: #919191;
@@ -69,7 +69,7 @@
   }
 
   .boxtext{
-    width: 50px;
+    width: 85px;
     height: 10px;
     border: 1px solid;
     border-radius: 10px;
@@ -82,9 +82,20 @@
   
  
 .boxtexts {
-  width: 130px;
+  width: 120px;
   padding: 10px;
   border: 1px solid;
   border-radius: 10px;
   font-size: 15px;
+}
+
+.boxtextl {
+  width: 100px;
+    height: 30px;
+    border: 1px solid;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    color: black;
 }

@@ -1,4 +1,4 @@
-// app/api/admin/route.js
+// app/api/admin/user/route.js
 import { NextResponse } from 'next/server'
 import { mysqlpool } from '@/utils/db'
 
