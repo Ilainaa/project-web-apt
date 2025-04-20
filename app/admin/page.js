@@ -5,6 +5,11 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import './admin.css'
 
+import UnpaidBillsTable from './components/UnpaidBillsTable'
+import RoomManagement from './components/RoomManagement'
+import UserManagement from './components/UserManagement'
+import PaidBillsTable from './components/PaidBillsTable'
+
 export default function Page() {
   const router = useRouter()
   const [activeBox, setActiveBox] = useState('page1')
@@ -46,7 +51,7 @@ export default function Page() {
       }
     }
 
-    if (pageName === 'page9') {
+    if (pageName === 'page7') {
       try {
         const res = await fetch('/api/admin/billrate')
         const data = await res.json()
@@ -226,57 +231,57 @@ export default function Page() {
 
   const saveBill = async () => {
     // 1. ตรวจสอบการเลือกรอบบิล
-    if (!selectedMonth || selectedMonth === '' || selectedMonth === '--เดือน--' || 
-        !selectedYear || selectedYear === '' || selectedYear === '--ปี--') {
+    if (!selectedMonth || selectedMonth === '' || selectedMonth === '--เดือน--' ||
+      !selectedYear || selectedYear === '' || selectedYear === '--ปี--') {
       alert('กรุณาเลือกรอบบิลและปีให้ถูกต้อง')
       return
     }
-  
+
     // 2. ตรวจสอบข้อมูลมิเตอร์น้ำและไฟ
     if (!waterPrice || !electricPrice) {
       alert('กรุณากรอกเลขมิเตอร์น้ำและไฟ')
       return
     }
-  
+
     // 3. ตรวจสอบว่าเลขมิเตอร์ครั้งนี้ต้องไม่น้อยกว่าครั้งก่อน
     const prevWaterUnit = parseInt(bill?.water_unit || 0);
     const prevElectricUnit = parseInt(bill?.electricity_unit || 0);
     const currentWaterUnit = parseInt(waterPrice);
     const currentElectricUnit = parseInt(electricPrice);
-  
+
     if (currentWaterUnit < prevWaterUnit) {
       alert('เลขมิเตอร์น้ำครั้งนี้ต้องไม่น้อยกว่าครั้งก่อน');
       return;
     }
-  
+
     if (currentElectricUnit < prevElectricUnit) {
       alert('เลขมิเตอร์ไฟครั้งนี้ต้องไม่น้อยกว่าครั้งก่อน');
       return;
     }
-  
+
     // 4. ตรวจสอบค่าส่วนกลางและค่าปรับ
     const prevCommonFee = parseInt(bill?.common_fee || 0);
     const prevLateFee = parseInt(bill?.late_fee || 0);
     const currentCommonFee = parseInt(commonFee || 0);
     const currentLateFee = parseInt(lateFee || 0);
-  
+
     if (currentCommonFee < prevCommonFee) {
       alert('ค่าส่วนกลางครั้งนี้ต้องไม่น้อยกว่าครั้งก่อน');
       return;
     }
-  
+
     if (currentLateFee < prevLateFee) {
       alert('ค่าปรับครั้งนี้ต้องไม่น้อยกว่าครั้งก่อน');
       return;
     }
-  
+
     const waterCost = calculateWaterCost()
     const electricCost = calculateElectricCost()
     const totalBill = calculateTotalBill()
-  
+
     setIsSaving(true)
     setSaveMessage('')
-  
+
     try {
       const newBillData = {
         room_num: currentRoom.room_num,
@@ -335,201 +340,7 @@ export default function Page() {
     }
   }
 
-  function UnpaidBillsTable({ onPaymentStatusUpdate }) {
-    const [unpaidBills, setUnpaidBills] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [searchTerm, setSearchTerm] = useState('')
-    const [userMap, setUserMap] = useState({})
-    const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 10
 
-    // เพิ่มตัวแปรเพื่อบังคับให้โหลดข้อมูลใหม่
-    const [refreshCounter, setRefreshCounter] = useState(0)
-
-    useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true)
-        try {
-          // ดึงข้อมูลบิลที่ยังไม่ชำระ
-          const billsRes = await fetch('/api/admin/historybill?status=ยังไม่ชำระ')
-          const billsData = await billsRes.json()
-
-          // ดึงข้อมูลผู้เช่า
-          const usersRes = await fetch('/api/admin/user')
-          const usersData = await usersRes.json()
-
-          // สร้าง map ของผู้เช่าโดยใช้ room_num เป็น key
-          const usersMapByRoom = {}
-          usersData.forEach(user => {
-            usersMapByRoom[user.room_num] = `${user.firstname} ${user.lastname}`
-          })
-
-          setUserMap(usersMapByRoom)
-          setUnpaidBills(billsData)
-        } catch (err) {
-          console.error('เกิดข้อผิดพลาดในการโหลดข้อมูล:', err)
-          setError('ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่อีกครั้ง')
-        } finally {
-          setLoading(false)
-        }
-      }
-
-      fetchData()
-
-      // เพิ่ม refreshCounter เป็น dependency เพื่อให้โหลดข้อมูลใหม่เมื่อค่าเปลี่ยน
-    }, [refreshCounter])
-
-    // กรองข้อมูลตามการค้นหา
-    const filteredBills = unpaidBills.filter(bill =>
-      bill.room_num.toString().includes(searchTerm) ||
-      (userMap[bill.room_num] && userMap[bill.room_num].toLowerCase().includes(searchTerm.toLowerCase()))
-    )
-
-    // คำนวณข้อมูลสำหรับหน้าปัจจุบัน
-    const indexOfLastItem = currentPage * itemsPerPage
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentBills = filteredBills.slice(indexOfFirstItem, indexOfLastItem)
-    const totalPages = Math.ceil(filteredBills.length / itemsPerPage)
-
-    const handlePaymentStatus = (billId, roomNum) => {//แก้ค่า fee...
-      if (confirm('ยืนยันการชำระเงิน?')) {
-        fetch('/api/admin/historybill', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            historybill_id: billId,
-            status_bill: 'ชำระแล้ว',
-            room_num: roomNum,
-            common_fee: 0,  // เพิ่มส่วนนี้ - รีเซ็ตค่าส่วนกลางเป็น 0
-            late_fee: 0     // เพิ่มส่วนนี้ - รีเซ็ตค่าปรับเป็น 0
-          }),
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message === 'อัพเดทข้อมูลสำเร็จ') {
-            setUnpaidBills(prevBills => 
-              prevBills.filter(bill => bill.historybill_id !== billId)
-            );
-            setRefreshCounter(prev => prev + 1);
-            alert('อัพเดทสถานะการชำระเงินเรียบร้อย');
-            
-            if (onPaymentStatusUpdate) {
-              onPaymentStatusUpdate();
-            }
-          } else {
-            alert('เกิดข้อผิดพลาดในการอัพเดทสถานะ');
-          }
-        })
-        .catch(error => {
-          console.error('เกิดข้อผิดพลาด:', error);
-          alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
-        });
-      }
-    };
-
-
-    if (loading) return <div>กำลังโหลดข้อมูล...</div>
-    if (error) return <div style={{ color: 'red' }}>{error}</div>
-
-    return (
-      <div>
-        <div style={{ marginBottom: '15px' }}>
-          <input
-            type="text"
-            className="boxtext"
-            placeholder="ค้นหาเลขห้อง หรือชื่อผู้เช่า..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value)
-              setCurrentPage(1)
-            }}
-            style={{ width: '300px' }}
-          />
-        </div>
-
-        {filteredBills.length === 0 ? (
-          <p>ไม่พบข้อมูลรายการรอชำระ</p>
-        ) : (
-          <>
-            <div style={{ overflowX: 'auto' }}>
-              <table border="1" cellPadding="10" style={{ borderCollapse: 'collapse', width: '100%' }}>
-                <thead>
-                  <tr style={{ backgroundColor: '#f2f2f2' }}>
-                    <th>หมายเลขบิล</th>
-                    <th>เลขห้อง</th>
-                    <th>ผู้เช่า</th>
-                    <th>รอบบิล</th>
-                    <th>ค่าเช่า</th>
-                    <th>รวม(น้ำ)</th>
-                    <th>รวม(ไฟ)</th>
-                    <th>ค่าส่วนกลาง</th>
-                    <th>ค่าปรับ</th>
-                    <th>รวมทั้งสิ้น</th>
-                    <th>จัดการ</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentBills.map((bill) => (
-                    <tr key={bill.historybill_id}>
-                      <td>{bill.historybill_id}</td>
-                      <td>{bill.room_num}</td>
-                      <td>{userMap[bill.room_num] || '-'}</td>
-                      <td>{bill.month_bill}/{bill.year_bill}</td>
-                      <td>{bill.renprice_month}</td>
-                      <td>{bill.water_price}</td>
-                      <td>{bill.electricity_price}</td>
-                      <td>{bill.common_fee}</td>
-                      <td>{bill.late_fee}</td>
-                      <td style={{ fontWeight: 'bold' }}>{bill.totalprice}</td>
-                      <td>
-                        <button
-                          style={{
-                            backgroundColor: 'green',
-                            color: 'white',
-                            padding: '5px 10px',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer'
-                          }}
-                          onClick={() => handlePaymentStatus(bill.historybill_id, bill.room_num)}  // ส่งค่า room_num ไปด้วย
-                        >
-                          ชำระเงิน
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div style={{ marginTop: '20px', textAlign: 'center' }}>
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <button
-                    key={i + 1}
-                    onClick={() => setCurrentPage(i + 1)}
-                    style={{
-                      margin: '0 5px',
-                      padding: '5px 10px',
-                      backgroundColor: currentPage === i + 1 ? 'yellow' : 'white',
-                      border: '1px solid #ccc',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    )
-  }
 
 
 
@@ -607,12 +418,10 @@ export default function Page() {
         <UnpaidBillsTable onPaymentStatusUpdate={handlePaymentStatusUpdate} />
       </div>
     ),
-    page4: 'ข้อมูลผู้ที่ชำระเงินแล้ว',
-    page5: 'รอย้ายออก',
-    page6: 'ย้ายออกแล้ว',
-    page7: 'จัดการห้องพัก',
-    page8: 'จัดการข้อมูลผู้เช่า',
-    page9: (
+    page4: <PaidBillsTable />,
+    page5: <RoomManagement />,
+    page6: <UserManagement />,
+    page7: (
       <div>
         <h2>จัดการเรทค่าน้ำ/ไฟ</h2>
         {billRates.map((rate, index) => (
@@ -650,7 +459,13 @@ export default function Page() {
 
             {!rate.editing ? (
               <button
-                style={{ backgroundColor: 'yellow', padding: '5px 10px', marginRight: '10px' }}
+                style={{
+                  backgroundColor: 'yellow',
+                  padding: '5px 10px',
+                  cursor: 'pointer',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px'
+                }}
                 onClick={() => toggleEdit(index, true)}
               >
                 แก้ไข
@@ -667,7 +482,13 @@ export default function Page() {
         ))}
       </div>
     ),
+    page8: <div className="box">จัดการคำร้อง</div>, // Also fix page8 to be consistent
   }
+
+
+
+
+
 
   if (activeBox.startsWith('page2_1_1_')) {
     const roomId = parseInt(activeBox.split('_')[3])
@@ -986,10 +807,9 @@ export default function Page() {
             ) : (
               <table border="1" cellPadding="10" style={{ borderCollapse: 'collapse', width: '100%' }}>
                 <thead>
-                  <tr>
+                  <tr style={{ backgroundColor: '#f2f2f2' }}>
                     <th>หมายเลขบิล</th>
                     <th style={{ minWidth: '100px' }}>รอบบิลเดือน/ปี</th>
-
                     <th>ค่าเช่า</th>
                     <th>ค่าน้ำ</th>
                     <th>ยูนิตน้ำ</th>
@@ -1047,7 +867,7 @@ export default function Page() {
 
       <div style={{ display: 'flex', flexDirection: 'row', height: '90vh' }}>
         <div style={{ width: '250px', background: '#f4f4f4', padding: '10px' }}>
-          {['page1', 'page2', 'page3', 'page4', 'page5', 'page6', 'page7', 'page8', 'page9'].map((page) => (
+          {['page1', 'page2', 'page3', 'page4', 'page5', 'page6', 'page7', 'page8'].map((page) => (
             <div
               key={page}
               className="box"
@@ -1059,11 +879,10 @@ export default function Page() {
                 page2: 'รายการห้องพัก',
                 page3: 'รายการรอชำระ',
                 page4: 'รายการชำระแล้ว',
-                page5: 'รอย้ายออก',
-                page6: 'ย้ายออกแล้ว',
-                page7: 'จัดการห้องพัก',
-                page8: 'จัดการข้อมูลผู้เช่า',
-                page9: 'จัดการเรทค่าน้ำ/ไฟ'
+                page5: 'จัดการห้องพัก',
+                page6: 'จัดการข้อมูลผู้เช่า',
+                page7: 'จัดการเรทค่าน้ำ/ไฟ',
+                page8: 'จัดการคำร้อง',
               }[page]}
             </div>
           ))}
