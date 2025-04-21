@@ -14,8 +14,11 @@ export default function Page() {
   const router = useRouter()
   const [activeBox, setActiveBox] = useState('page1')
   const [roomData, setRoomData] = useState([])
+
+  const [selectedDay, setSelectedDay] = useState('')
   const [selectedMonth, setSelectedMonth] = useState('')
   const [selectedYear, setSelectedYear] = useState('')
+
   const [currentPage, setCurrentPage] = useState(1)
   const roomsPerPage = 10
   const [searchTerm, setSearchTerm] = useState('')
@@ -51,7 +54,7 @@ export default function Page() {
       }
     }
 
-    if (pageName === 'page7') {
+    if (pageName === 'page6') {
       try {
         const res = await fetch('/api/admin/billrate')
         const data = await res.json()
@@ -231,9 +234,10 @@ export default function Page() {
 
   const saveBill = async () => {
     // 1. ตรวจสอบการเลือกรอบบิล
-    if (!selectedMonth || selectedMonth === '' || selectedMonth === '--เดือน--' ||
-      !selectedYear || selectedYear === '' || selectedYear === '--ปี--') {
-      alert('กรุณาเลือกรอบบิลและปีให้ถูกต้อง')
+    if (!selectedDay || selectedDay === '' ||
+        !selectedMonth || selectedMonth === '' || selectedMonth === '--เดือน--' ||
+        !selectedYear || selectedYear === '' || selectedYear === '--ปี--') {
+      alert('กรุณาเลือกวัน เดือน และปีให้ถูกต้อง')
       return
     }
 
@@ -285,6 +289,7 @@ export default function Page() {
     try {
       const newBillData = {
         room_num: currentRoom.room_num,
+        day_bill: selectedDay, 
         month_bill: selectedMonth,
         year_bill: selectedYear,
         renprice_month: currentRoom.renprice_month,
@@ -340,13 +345,27 @@ export default function Page() {
     }
   }
 
+  const getDaysInMonth = (month) => {
+    if (!month) return 0;
 
+    if (month === 'กุมภาพันธ์') {
+      return 28;
+    } else if (month.endsWith('คม')) {
+      return 31;
+    } else if (month.endsWith('ยน')) {
+      return 30;
+    } else {
+      return 30; // ค่าเริ่มต้นกรณีไม่ตรงกับเงื่อนไขใด
+    }
+  }
 
-
+  useEffect(() => {
+    setSelectedDay('');
+  }, [selectedMonth]);
 
   const pageContent = {
-    page1: <div className="box">หน้าหลัก</div>,
-    page2: (
+    
+    page1: (
       <div>
         <h2>ข้อมูลห้องพัก</h2>
         <p style={{ color: 'red' }}>* ค้างชำระ : {unpaidCount} ห้อง</p>
@@ -355,6 +374,7 @@ export default function Page() {
           <input
             type="text"
             className="boxtext"
+            style={{ width: '100px' }}
             placeholder="ค้นหาเลขห้อง..."
             value={searchTerm}
             onChange={(e) => {
@@ -412,16 +432,16 @@ export default function Page() {
         </div>
       </div>
     ),
-    page3: (
+    page2: (
       <div>
         <h2>รายการรอชำระ</h2>
         <UnpaidBillsTable onPaymentStatusUpdate={handlePaymentStatusUpdate} />
       </div>
     ),
-    page4: <PaidBillsTable />,
-    page5: <RoomManagement />,
-    page6: <UserManagement />,
-    page7: (
+    page3: <PaidBillsTable />,
+    page4: <RoomManagement />,
+    page5: <UserManagement />,
+    page6: (
       <div>
         <h2>จัดการเรทค่าน้ำ/ไฟ</h2>
         {billRates.map((rate, index) => (
@@ -482,7 +502,7 @@ export default function Page() {
         ))}
       </div>
     ),
-    page8: <div className="box">จัดการคำร้อง</div>, // Also fix page8 to be consistent
+    
   }
 
 
@@ -510,25 +530,39 @@ export default function Page() {
           <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <label style={{ marginRight: '10px' }}>เลือกรอบบิล :</label>
+
+              {/* เพิ่ม select วัน */}
               <select
                 className="boxtexts"
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
+                value={selectedDay}
+                style={{ width: '80px', marginRight: '10px' }}
+                onChange={(e) => setSelectedDay(e.target.value)}
               >
-                <option value="">--เดือน--</option>
-                <option value="มกราคม">มกราคม</option>
-                <option value="กุมภาพันธ์">กุมภาพันธ์</option>
-                <option value="มีนาคม">มีนาคม</option>
-                <option value="เมษายน">เมษายน</option>
-                <option value="พฤษภาคม">พฤษภาคม</option>
-                <option value="มิถุนายน">มิถุนายน</option>
-                <option value="กรกฎาคม">กรกฎาคม</option>
-                <option value="สิงหาคม">สิงหาคม</option>
-                <option value="กันยายน">กันยายน</option>
-                <option value="ตุลาคม">ตุลาคม</option>
-                <option value="พฤศจิกายน">พฤศจิกายน</option>
-                <option value="ธันวาคม">ธันวาคม</option>
+                <option value="">--วัน--</option>
+                {Array.from({ length: getDaysInMonth(selectedMonth) }, (_, i) => (
+                  <option key={i + 1} value={i + 1}>{i + 1}</option>
+                ))}
               </select>
+
+              <select
+      className="boxtexts"
+      value={selectedMonth}
+      onChange={(e) => setSelectedMonth(e.target.value)}
+    >
+      <option value="">--เดือน--</option>
+      <option value="มกราคม">มกราคม</option>
+      <option value="กุมภาพันธ์">กุมภาพันธ์</option>
+      <option value="มีนาคม">มีนาคม</option>
+      <option value="เมษายน">เมษายน</option>
+      <option value="พฤษภาคม">พฤษภาคม</option>
+      <option value="มิถุนายน">มิถุนายน</option>
+      <option value="กรกฎาคม">กรกฎาคม</option>
+      <option value="สิงหาคม">สิงหาคม</option>
+      <option value="กันยายน">กันยายน</option>
+      <option value="ตุลาคม">ตุลาคม</option>
+      <option value="พฤศจิกายน">พฤศจิกายน</option>
+      <option value="ธันวาคม">ธันวาคม</option>
+    </select>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -754,7 +788,7 @@ export default function Page() {
               <span style={{ marginLeft: '5px', fontWeight: 'bold' }}>บาท</span>
             </div>
 
-            {/* ปุ่มบันทึก */}
+
             <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center' }}>
               <button onClick={handleBack}
                 style={{
@@ -809,7 +843,7 @@ export default function Page() {
                 <thead>
                   <tr style={{ backgroundColor: '#f2f2f2' }}>
                     <th>หมายเลขบิล</th>
-                    <th style={{ minWidth: '100px' }}>รอบบิลเดือน/ปี</th>
+                    <th style={{ minWidth: '100px' }}>รอบบิลวัน/เดือน/ปี</th>
                     <th>ค่าเช่า</th>
                     <th>ค่าน้ำ</th>
                     <th>ยูนิตน้ำ</th>
@@ -826,7 +860,7 @@ export default function Page() {
                   {historyData.map((bill) => (
                     <tr key={bill.historybill_id}>
                       <td>{bill.historybill_id}</td>
-                      <td>{bill.month_bill}/{bill.year_bill}</td>
+                      <td>{bill.day_bill}/{bill.month_bill}/{bill.year_bill}</td>
                       <td>{bill.renprice_month}</td>
                       <td>{bill.water_price}</td>
                       <td>{bill.water_unit}</td>
@@ -867,7 +901,7 @@ export default function Page() {
 
       <div style={{ display: 'flex', flexDirection: 'row', height: '90vh' }}>
         <div style={{ width: '250px', background: '#f4f4f4', padding: '10px' }}>
-          {['page1', 'page2', 'page3', 'page4', 'page5', 'page6', 'page7', 'page8'].map((page) => (
+          {['page1', 'page2', 'page3', 'page4', 'page5', 'page6'].map((page) => (
             <div
               key={page}
               className="box"
@@ -875,14 +909,12 @@ export default function Page() {
               onClick={() => handleClick(page)}
             >
               {{
-                page1: 'หน้าหลัก',
-                page2: 'รายการห้องพัก',
-                page3: 'รายการรอชำระ',
-                page4: 'รายการชำระแล้ว',
-                page5: 'จัดการห้องพัก',
-                page6: 'จัดการข้อมูลผู้เช่า',
-                page7: 'จัดการเรทค่าน้ำ/ไฟ',
-                page8: 'จัดการคำร้อง',
+                page1: 'รายการห้องพัก',
+                page2: 'รายการรอชำระ',
+                page3: 'รายการชำระแล้ว',
+                page4: 'จัดการห้องพัก',
+                page5: 'จัดการข้อมูลผู้เช่า',
+                page6: 'จัดการเรทค่าน้ำ/ไฟ',
               }[page]}
             </div>
           ))}

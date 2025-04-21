@@ -152,7 +152,7 @@ export default function RoomManagement() {
               setSearchTerm(e.target.value)
               setCurrentPage(1)
             }}
-            style={{ width: '300px' }}
+            style={{ width: '100px' }}
           />
         </div>
         

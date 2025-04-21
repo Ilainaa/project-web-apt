@@ -1,0 +1,110 @@
+/* login.css */
+.container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .videoBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+  
+  .content {
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 3rem;
+    color: #333;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .input {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    outline: none;
+    background-color: #d3d3d3;
+    color: #333;
+    transition: border-color 0.3s;
+    width: 92%;
+  }
+  
+  .passwordContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  
+  .optionsContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .rememberContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .checkbox {
+    margin-right: 0.5rem;
+  }
+  
+  .rememberLabel {
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
+  .eyeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .button {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .error {
+    color: red;
+    margin-bottom: 1rem;
+  }
+  

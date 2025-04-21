@@ -84,13 +84,13 @@ export default function UnpaidBillsTable({ onPaymentStatusUpdate }) {
     <div>
       <input
         className="boxtext"
-        placeholder="ค้นหาเลขห้อง หรือชื่อ..."
+        placeholder="ค้นหาเลขห้อง..."
         value={searchTerm}
         onChange={(e) => {
           setSearchTerm(e.target.value)
           setCurrentPage(1)
         }}
-        style={{ width: '300px', marginBottom: '15px' }}
+        style={{ width: '150px', marginBottom: '15px' }}
       />
       {filteredBills.length === 0 ? (
         <p>ไม่พบรายการ</p>
@@ -119,7 +119,7 @@ export default function UnpaidBillsTable({ onPaymentStatusUpdate }) {
                     <td>{bill.historybill_id}</td>
                     <td>{bill.room_num}</td>
                     <td>{userMap[bill.room_num] || '-'}</td>
-                    <td>{bill.month_bill}/{bill.year_bill}</td>
+                    <td>{bill.day_bill}/{bill.month_bill}/{bill.year_bill}</td>
                     <td>{bill.renprice_month}</td>
                     <td>{bill.water_price}</td>
                     <td>{bill.electricity_price}</td>

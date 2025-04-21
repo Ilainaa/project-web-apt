@@ -1,3 +1,4 @@
+//utils/db.js
 const mysql = require('mysql2')
 export const mysqlpool = mysql.createPool({
     host: 'localhost',

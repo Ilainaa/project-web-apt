@@ -127,13 +127,13 @@ export default function UserManagement() {
         <input
           type="text"
           className="boxtext"
-          placeholder="ค้นหาข้อมูลผู้เช่า..."
+          placeholder="ค้นหาเลขห้อง..."
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value)
             setCurrentPage(1)
           }}
-          style={{ width: '300px' }}
+          style={{ width: '100px' }}
         />
       </div>
       
@@ -198,6 +198,7 @@ export default function UserManagement() {
                         type="text"
                         value={user.phonenumber || ''}
                         onChange={(e) => handleUserChange(user.user_id, 'phonenumber', e.target.value)}
+                        style={{ width: '100px' }}
                       />
                     ) : (
                       user.phonenumber || '-'

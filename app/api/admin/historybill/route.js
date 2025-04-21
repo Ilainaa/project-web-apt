@@ -49,7 +49,7 @@ export async function POST(request) {
         const billData = await request.json()
 
         // ตรวจสอบข้อมูลที่จำเป็น
-        const requiredFields = ['room_num', 'month_bill', 'year_bill', 'renprice_month', 'water_price',
+        const requiredFields = ['room_num', 'day_bill', 'month_bill', 'year_bill', 'renprice_month', 'water_price',
             'water_unit', 'electricity_price', 'electricity_unit',
             'common_fee', 'late_fee', 'totalprice', 'status_bill'];
 
@@ -82,16 +82,17 @@ export async function POST(request) {
 
         // เพิ่มข้อมูลบิลใหม่
         const query = `
-            INSERT INTO historybill (
-                historybill_id, room_num, month_bill,year_bill, renprice_month, 
-                water_price, water_unit, electricity_price, electricity_unit,
-                common_fee, late_fee, totalprice, status_bill, timestamp
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
+    INSERT INTO historybill (
+        historybill_id, room_num, day_bill, month_bill, year_bill, renprice_month, 
+        water_price, water_unit, electricity_price, electricity_unit,
+        common_fee, late_fee, totalprice, status_bill, timestamp
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`;
 
         const params = [
             nextId,
             billData.room_num,
+            billData.day_bill,
             billData.month_bill,
             billData.year_bill,
             billData.renprice_month,
@@ -144,7 +145,7 @@ export async function PUT(request) {
 
         // ตรวจสอบฟิลด์ที่จะอัพเดท
         const updateableFields = [
-            'room_num', 'month_bill', 'year_bill', 'renprice_month',
+            'room_num', 'day_bill','month_bill', 'year_bill', 'renprice_month',
             'water_price', 'water_unit', 'electricity_price',
             'electricity_unit', 'common_fee', 'late_fee',
             'totalprice', 'status_bill'

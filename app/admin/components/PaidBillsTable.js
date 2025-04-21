@@ -61,13 +61,14 @@ export default function PaidBillsTable() {
         <input
           type="text"
           className="boxtext"
-          placeholder="ค้นหาเลขห้อง หรือ เดือน/ปี..."
+          
+          placeholder="ค้นหาเลขห้อง..."
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value)
             setCurrentPage(1)
           }}
-          style={{ padding: '8px', width: '300px' }}
+          style={{ padding: '8px', width: '100px' }}
         />
       </div>
 
@@ -98,7 +99,7 @@ export default function PaidBillsTable() {
                 <tr key={bill.historybill_id}>
                   <td>{bill.historybill_id}</td>
                   <td>{bill.room_num}</td>
-                  <td>{bill.month_bill}/{bill.year_bill}</td>
+                  <td>{bill.day_bill}/{bill.month_bill}/{bill.year_bill}</td>
                   <td>{bill.renprice_month}</td>
                   <td>{bill.water_price}</td>
                   <td>{bill.water_unit}</td>
