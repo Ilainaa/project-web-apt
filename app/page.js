@@ -15,6 +15,8 @@ export default function Page() {
   const [busImageIndex, setBusImageIndex] = useState(0)
   const router = useRouter()
 
+  
+
   const newsImages = [
     '/image/apt1.jpg',
     '/image/apt2.jpg',
@@ -48,13 +50,13 @@ export default function Page() {
       <>
         <div style={{ display: 'flex', gap: '100px', justifyContent: 'center', marginTop: '-50px' }}>
           <div
-            className={`box ${activeBox === 'info' ? 'active-box' : ''}`}
+            className={`boxmain ${activeBox === 'info' ? 'active-boxmain' : ''}`}
             onClick={() => setActiveBox('info')}
           >
             ข้อมูลข่าวสาร
           </div>
           <div
-            className={`box ${activeBox === 'bus' ? 'active-box' : ''}`}
+            className={`boxmain ${activeBox === 'bus' ? 'active-boxmain' : ''}`}
             onClick={() => setActiveBox('bus')}
           >
             ตารางเวลารถ
@@ -128,7 +130,7 @@ export default function Page() {
 
       <div className="overlay-content">
         <div
-          className="menubar"
+          className="menubarmain"
           style={{
             position: 'fixed',
             top: 0,
@@ -141,15 +143,15 @@ export default function Page() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
             <img src="/image/logosunmoon.png" alt="logo" style={{ height: '40px' }} />
             <div className="brand-name">Sunmoon apartment</div>
-            <div className={`menu-tab ${activePage === 'page1' ? 'active' : ''}`} onClick={() => handleClick('page1')}>
+            <div className={`menumain-tab ${activePage === 'page1' ? 'active' : ''}`} onClick={() => handleClick('page1')}>
               หน้าหลัก
             </div>
-            <div className={`menu-tab ${activePage === 'page2' ? 'active' : ''}`} onClick={() => handleClick('page2')}>
+            <div className={`menumain-tab ${activePage === 'page2' ? 'active' : ''}`} onClick={() => handleClick('page2')}>
               ห้องของคุณ
             </div>
           </div>
 
-          <div className="logout-btn" onClick={handleLogout}>
+          <div className="logoutmain-btn" onClick={handleLogout}>
             ออกจากระบบ
           </div>
         </div>
@@ -161,7 +163,7 @@ export default function Page() {
             alignItems: 'center',
             height: 'calc(90vh - 60px)',
             padding: '30px',
-            paddingTop: '100px', // เพิ่ม padding ด้านบน
+            paddingTop: '100px',
           }}
         >
           <div
@@ -172,7 +174,7 @@ export default function Page() {
               borderRadius: '10px',
               background: 'rgba(255, 255, 255, 0.9)',
               boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-              paddingTop: '20px', // เพิ่ม padding ด้านบน
+              paddingTop: '20px', 
             }}
           >
             {pageContent[activePage]}

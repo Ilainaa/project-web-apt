@@ -1,22 +1,22 @@
 
-.menubar {
+.menubarmain {
     width: 96.05%;
     height: 60px;
     background-color: #ffffff;
     padding: 10px 30px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* เอา logout ไปขวาสุด */
+    justify-content: space-between; 
     font-size: 20px;
     color: #000000;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  .box {
+  .boxmain {
     width: 180px;
     border: none;
     border-radius: 12px;
-    margin: 0; /* เปลี่ยนจาก auto เป็น 0 หรือเว้นระยะเท่าที่ต้องการ */
+    margin: 0; 
     padding: 12px 20px;
     background-color: #ffffff;
     color: #333;
@@ -24,15 +24,15 @@
     font-weight: 500;
     text-align: center;
     transition: all 0.2s ease-in-out;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* เงาเข้มขึ้น */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); 
   }
-  .active-box {
+  .active-boxmain {
     color: #007BFF; /* สีฟ้า */
     border-bottom: 3px solid #007BFF;
     font-weight: bold;
   }
   
-  .box:hover {
+  .boxmain:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
   }
@@ -67,14 +67,7 @@
   }
 
 
-/* Container ด้านนอกสุด */
-.tenant-container {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  padding: 20px;
-  box-sizing: border-box;
-}
+
 
 /* ป้องกัน flex ล้น */
 .detail-row, .bill-item {
@@ -94,7 +87,7 @@
 }
 
   
-  .menu-tab {
+  .menumain-tab {
     padding: 8px 16px;
     border-radius: 8px;
     cursor: pointer;
@@ -102,24 +95,24 @@
     color: black;
   }
   
-  .menu-tab:hover {
+  .menumain-tab:hover {
     color: #0288d1;
   }
   
-  .menu-tab.active {
+  .menumain-tab.active {
     border: 2px solid #0288d1;
     color: #0288d1;
   }
   
   /* ปุ่มออกจากระบบ */
-  .logout-btn {
+  .logoutmain-btn {
     cursor: pointer;
     font-weight: bold;
     transition: color 0.3s;
     color: black;
   }
   
-  .logout-btn:hover {
+  .logoutmain-btn:hover {
     color: red;
   }
   
@@ -130,7 +123,7 @@
     cursor: default; /* ไม่เปลี่ยน cursor เมื่อชี้ */
   }
   
-  /* โลโก้แนะนำใช้ max-height เผื่อปรับในอนาคต */
+
   .menubar img {
     max-height: 40px;
   }
@@ -201,22 +194,6 @@
     background: rgba(255, 255, 255, 0.9);
   }
   
- /* CSS สำหรับ TenantInfo แบบแนวนอน */
-.tenant-container {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.tenant-info {
-  padding: 20px;
-  background: linear-gradient(to bottom, #ffffff, #f9f9f9);
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  border: 1px solid #eaeaea;
-}
 
 .room-header {
   display: flex;
@@ -251,23 +228,20 @@
   color: #e53935;
 }
 
-/* ส่วนของ layout แนวนอน */
-.tenant-content-row {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
+.tenant-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
-.tenant-column {
-  flex: 1;
-}
-
-.left-column {
-  max-width: 40%; /* ปรับขนาดตามต้องการ */
-}
-
-.right-column {
-  max-width: 60%; /* ปรับขนาดตามต้องการ */
+.tenant-info {
+  padding: 20px;
+  background: linear-gradient(to bottom, #ffffff, #f9f9f9);
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  border: 1px solid #eaeaea;
 }
 
 .tenant-detail-section, .bill-section {
@@ -388,13 +362,4 @@
   transform: translateY(1px);
 }
 
-/* Media query สำหรับหน้าจอเล็ก */
-@media (max-width: 768px) {
-  .tenant-content-row {
-    flex-direction: column;
-  }
-  
-  .left-column, .right-column {
-    max-width: 100%;
-  }
-}
+

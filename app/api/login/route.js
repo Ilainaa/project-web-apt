@@ -17,7 +17,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       success: true,
-      isAdmin: user.username === 'admin', // <-- ตรวจตรงนี้
+      isAdmin: user.username === 'admin', 
     })
   } else {
     return NextResponse.json({ success: false, message: 'Invalid credentials' });

@@ -42,9 +42,24 @@ export default function Page() {
     router.push('/login')
   }
 
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        // โหลดข้อมูลห้องพักใหม่
+        const res = await fetch('/api/admin/room')
+        const data = await res.json()
+        setRoomData(data)
+      } catch (err) {
+        console.error('โหลดข้อมูลห้องพักล้มเหลว:', err)
+      }
+    }
+
+    loadData();
+  }, []); 
+
   const handleClick = async (pageName) => {
     setActiveBox(pageName)
-    if (pageName.startsWith('page2')) {
+    if (pageName.startsWith('page1')) {
       try {
         const res = await fetch('/api/admin/room')
         const data = await res.json()
@@ -112,11 +127,11 @@ export default function Page() {
     setSelectedMonth('--เดือน--')
     setSelectedYear('--ปี--')
     setSaveMessage('')
-    setActiveBox('page2')
+    setActiveBox('page1')
   }
 
   useEffect(() => {
-    if (activeBox.startsWith('page2_1_1_')) {
+    if (activeBox.startsWith('page1_1_1_')) {
       const roomId = parseInt(activeBox.split('_')[3]);
 
       setHistoryData([]);
@@ -235,8 +250,8 @@ export default function Page() {
   const saveBill = async () => {
     // 1. ตรวจสอบการเลือกรอบบิล
     if (!selectedDay || selectedDay === '' ||
-        !selectedMonth || selectedMonth === '' || selectedMonth === '--เดือน--' ||
-        !selectedYear || selectedYear === '' || selectedYear === '--ปี--') {
+      !selectedMonth || selectedMonth === '' || selectedMonth === '--เดือน--' ||
+      !selectedYear || selectedYear === '' || selectedYear === '--ปี--') {
       alert('กรุณาเลือกวัน เดือน และปีให้ถูกต้อง')
       return
     }
@@ -289,7 +304,7 @@ export default function Page() {
     try {
       const newBillData = {
         room_num: currentRoom.room_num,
-        day_bill: selectedDay, 
+        day_bill: selectedDay,
         month_bill: selectedMonth,
         year_bill: selectedYear,
         renprice_month: currentRoom.renprice_month,
@@ -364,7 +379,7 @@ export default function Page() {
   }, [selectedMonth]);
 
   const pageContent = {
-    
+
     page1: (
       <div>
         <h2>ข้อมูลห้องพัก</h2>
@@ -405,7 +420,7 @@ export default function Page() {
                   color: 'white',
                   cursor: 'pointer'
                 }}
-                onClick={() => setActiveBox(`page2_1_1_${room.room_id}`)}
+                onClick={() => setActiveBox(`page1_1_1_${room.room_id}`)}
               >
                 ROOM{room.room_num}
               </div>
@@ -502,15 +517,10 @@ export default function Page() {
         ))}
       </div>
     ),
-    
+
   }
 
-
-
-
-
-
-  if (activeBox.startsWith('page2_1_1_')) {
+  if (activeBox.startsWith('page1_1_1_')) {
     const roomId = parseInt(activeBox.split('_')[3])
     const room = roomData.find((r) => r.room_id === roomId)
 
@@ -531,7 +541,7 @@ export default function Page() {
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <label style={{ marginRight: '10px' }}>เลือกรอบบิล :</label>
 
-              {/* เพิ่ม select วัน */}
+              {/*select วัน */}
               <select
                 className="boxtexts"
                 value={selectedDay}
@@ -545,24 +555,24 @@ export default function Page() {
               </select>
 
               <select
-      className="boxtexts"
-      value={selectedMonth}
-      onChange={(e) => setSelectedMonth(e.target.value)}
-    >
-      <option value="">--เดือน--</option>
-      <option value="มกราคม">มกราคม</option>
-      <option value="กุมภาพันธ์">กุมภาพันธ์</option>
-      <option value="มีนาคม">มีนาคม</option>
-      <option value="เมษายน">เมษายน</option>
-      <option value="พฤษภาคม">พฤษภาคม</option>
-      <option value="มิถุนายน">มิถุนายน</option>
-      <option value="กรกฎาคม">กรกฎาคม</option>
-      <option value="สิงหาคม">สิงหาคม</option>
-      <option value="กันยายน">กันยายน</option>
-      <option value="ตุลาคม">ตุลาคม</option>
-      <option value="พฤศจิกายน">พฤศจิกายน</option>
-      <option value="ธันวาคม">ธันวาคม</option>
-    </select>
+                className="boxtexts"
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+              >
+                <option value="">--เดือน--</option>
+                <option value="มกราคม">มกราคม</option>
+                <option value="กุมภาพันธ์">กุมภาพันธ์</option>
+                <option value="มีนาคม">มีนาคม</option>
+                <option value="เมษายน">เมษายน</option>
+                <option value="พฤษภาคม">พฤษภาคม</option>
+                <option value="มิถุนายน">มิถุนายน</option>
+                <option value="กรกฎาคม">กรกฎาคม</option>
+                <option value="สิงหาคม">สิงหาคม</option>
+                <option value="กันยายน">กันยายน</option>
+                <option value="ตุลาคม">ตุลาคม</option>
+                <option value="พฤศจิกายน">พฤศจิกายน</option>
+                <option value="ธันวาคม">ธันวาคม</option>
+              </select>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center' }}>
