@@ -67,26 +67,6 @@
   }
 
 
-
-
-/* ป้องกัน flex ล้น */
-.detail-row, .bill-item {
-  flex-wrap: wrap;
-}
-
-/* ป้องกันข้อความยาวล้น */
-.detail-label, .detail-value,
-.bill-item-label, .bill-item-value {
-  word-break: break-word;
-  min-width: 0;
-}
-
-/* เพิ่มความยืดหยุ่นให้ element ภายใน row */
-.detail-value, .bill-item-value {
-  flex: 1;
-}
-
-  
   .menumain-tab {
     padding: 8px 16px;
     border-radius: 8px;
@@ -194,6 +174,22 @@
     background: rgba(255, 255, 255, 0.9);
   }
   
+ 
+.tenant-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.tenant-info {
+  padding: 20px;
+  background: linear-gradient(to bottom, #ffffff, #f9f9f9);
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  border: 1px solid #eaeaea;
+}
 
 .room-header {
   display: flex;
@@ -228,21 +224,6 @@
   color: #e53935;
 }
 
-.tenant-container {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.tenant-info {
-  padding: 20px;
-  background: linear-gradient(to bottom, #ffffff, #f9f9f9);
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  border: 1px solid #eaeaea;
-}
 
 .tenant-detail-section, .bill-section {
   margin-bottom: 15px;

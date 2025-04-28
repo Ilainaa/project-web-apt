@@ -247,6 +247,7 @@ export default function Page() {
     return roomRent + waterTotal + electricTotal + commonFeeTotal + lateFeeTotal;
   }
 
+  ////////save bill
   const saveBill = async () => {
     // 1. ตรวจสอบการเลือกรอบบิล
     if (!selectedDay || selectedDay === '' ||
@@ -378,6 +379,8 @@ export default function Page() {
     setSelectedDay('');
   }, [selectedMonth]);
 
+  
+////////////////////////////////////////////////////////////////////////////////////////
   const pageContent = {
 
     page1: (
@@ -453,9 +456,9 @@ export default function Page() {
         <UnpaidBillsTable onPaymentStatusUpdate={handlePaymentStatusUpdate} />
       </div>
     ),
-    page3: <PaidBillsTable />,
-    page4: <RoomManagement />,
-    page5: <UserManagement />,
+    page3: <PaidBillsTable />,//รายการชำระแล้ว
+    page4: <RoomManagement />,//รายการจัดการห้อง
+    page5: <UserManagement />,//รายการจัดการผู้เช่า
     page6: (
       <div>
         <h2>จัดการเรทค่าน้ำ/ไฟ</h2>

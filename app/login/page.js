@@ -8,7 +8,6 @@ import './login.css'
 export default function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [rememberMe, setRememberMe] = useState(false)
   const [error, setError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
@@ -53,7 +52,7 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="form">
           <input
             type="text"
-            placeholder="อีเมลหรือเบอร์โทรศัพท์*"
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -62,7 +61,7 @@ export default function LoginPage() {
           <div className="passwordContainer">
             <input
               type={showPassword ? 'text' : 'password'}
-              placeholder="รหัสผ่าน*"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -71,15 +70,7 @@ export default function LoginPage() {
           </div>
           {error && <p className="error">{error}</p>}
           <div className="optionsContainer">
-            <div className="rememberContainer">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="checkbox"
-              />
-              <label className="rememberLabel">จดจำฉัน</label>
-            </div>
+            
           </div>
           <button type="submit" className="button">เข้าสู่ระบบ</button>
         </form>

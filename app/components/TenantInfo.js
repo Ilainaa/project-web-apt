@@ -35,7 +35,7 @@ export default function TenantInfo() {
         })
       })
 
-      if (updateRoomRes.ok && updateBillRes.ok) {
+      if (updateRoomRes.ok && updateBillRes.ok) { //แจ้งเตือน
         alert("ชำระเงินเรียบร้อยแล้ว")
         window.location.reload()
       } else {
