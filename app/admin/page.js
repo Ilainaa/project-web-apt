@@ -230,12 +230,28 @@ export default function Page() {
   }
 
   const calculateTotalCommonFee = () => {
-    return parseInt(commonFee || 0) + parseInt(bill?.common_fee || 0);
+
+    const currentFeeValue = parseInt(commonFee || 0);
+ 
+    const previousFeeValue = (bill && bill.status_bill !== 'ชำระแล้ว')
+                             ? parseInt(bill.common_fee || 0)
+                             : 0;
+
+    return currentFeeValue + previousFeeValue;
   }
+  
 
   const calculateTotalLateFee = () => {
-    return parseInt(lateFee || 0) + parseInt(bill?.late_fee || 0);
+
+    const currentLateFeeValue = parseInt(lateFee || 0);
+
+    const previousLateFeeValue = (bill && bill.status_bill !== 'ชำระแล้ว')
+                                 ? parseInt(bill.late_fee || 0)
+                                 : 0;
+
+    return currentLateFeeValue + previousLateFeeValue;
   }
+  
 
   const calculateTotalBill = () => {
     const roomRent = parseInt(currentRoom?.renprice_month || 0);
@@ -430,7 +446,7 @@ export default function Page() {
             )
           })}
         </div>
-
+          
         <div style={{ marginTop: '20px' }}>
           {Array.from({ length: totalPages }, (_, i) => (
             <button
@@ -734,7 +750,7 @@ export default function Page() {
                 <input
                   className="boxtext"
                   type="number"
-                  value={bill?.common_fee ?? '0'}
+                  value={bill?.status_bill === 'ชำระแล้ว' ? '0' : (bill?.common_fee ?? '0')}
                   readOnly
                 />
               </div>
@@ -770,7 +786,7 @@ export default function Page() {
                 <input
                   className="boxtext"
                   type="number"
-                  value={bill?.late_fee ?? '0'}
+                  value={bill?.status_bill === 'ชำระแล้ว' ? '0' : (bill?.late_fee ?? '0')}
                   readOnly
                 />
               </div>

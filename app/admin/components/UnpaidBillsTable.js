@@ -49,6 +49,15 @@ export default function UnpaidBillsTable({ onPaymentStatusUpdate }) {
   const totalPages = Math.ceil(filteredBills.length / itemsPerPage)
 
   const handlePaymentStatus = (billId, roomNum) => {
+
+    const billToUpdate = unpaidBills.find(bill => bill.historybill_id === billId);
+
+    if (!billToUpdate) {
+      console.error("ไม่พบบิลที่ต้องการอัปเดต:", billId);
+      alert("เกิดข้อผิดพลาด: ไม่พบบิล");
+      return;
+    }
+
     if (confirm('ยืนยันการชำระเงิน?')) {
       fetch('/api/admin/historybill', {
         method: 'PUT',
@@ -57,8 +66,8 @@ export default function UnpaidBillsTable({ onPaymentStatusUpdate }) {
           historybill_id: billId,
           status_bill: 'ชำระแล้ว',
           room_num: roomNum,
-          common_fee: 0,
-          late_fee: 0
+          common_fee: billToUpdate.common_fee,
+          late_fee: billToUpdate.late_fee
         }),
       })
         .then(res => res.json())
@@ -68,6 +77,8 @@ export default function UnpaidBillsTable({ onPaymentStatusUpdate }) {
             setRefreshCounter(prev => prev + 1)
             alert('อัพเดทสถานะสำเร็จ')
             onPaymentStatusUpdate?.()
+          }else {
+            alert(`อัพเดทสถานะไม่สำเร็จ: ${data.message || 'เกิดข้อผิดพลาดไม่ทราบสาเหตุ'}`);
           }
         })
         .catch(err => {

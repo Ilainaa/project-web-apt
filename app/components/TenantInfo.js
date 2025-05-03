@@ -30,8 +30,8 @@ export default function TenantInfo() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           status_bill: "ชำระแล้ว",
-          common_fee: 0,
-          late_fee: 0
+          common_fee: bill.common_fee,
+          late_fee: bill.late_fee
         })
       })
 

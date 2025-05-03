@@ -69,9 +69,7 @@ export default function LoginPage() {
             />
           </div>
           {error && <p className="error">{error}</p>}
-          <div className="optionsContainer">
-            
-          </div>
+          
           <button type="submit" className="button">เข้าสู่ระบบ</button>
         </form>
       </div>
