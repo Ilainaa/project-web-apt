@@ -55,7 +55,7 @@ export default function Page() {
     }
 
     loadData();
-  }, []); 
+  }, []);
 
   const handleClick = async (pageName) => {
     setActiveBox(pageName)
@@ -232,26 +232,26 @@ export default function Page() {
   const calculateTotalCommonFee = () => {
 
     const currentFeeValue = parseInt(commonFee || 0);
- 
+
     const previousFeeValue = (bill && bill.status_bill !== 'ชำระแล้ว')
-                             ? parseInt(bill.common_fee || 0)
-                             : 0;
+      ? parseInt(bill.common_fee || 0)
+      : 0;
 
     return currentFeeValue + previousFeeValue;
   }
-  
+
 
   const calculateTotalLateFee = () => {
 
     const currentLateFeeValue = parseInt(lateFee || 0);
 
     const previousLateFeeValue = (bill && bill.status_bill !== 'ชำระแล้ว')
-                                 ? parseInt(bill.late_fee || 0)
-                                 : 0;
+      ? parseInt(bill.late_fee || 0)
+      : 0;
 
     return currentLateFeeValue + previousLateFeeValue;
   }
-  
+
 
   const calculateTotalBill = () => {
     const roomRent = parseInt(currentRoom?.renprice_month || 0);
@@ -297,17 +297,10 @@ export default function Page() {
 
     // 4. ตรวจสอบค่าส่วนกลางและค่าปรับ
     const prevCommonFee = parseInt(bill?.common_fee || 0);
-    const prevLateFee = parseInt(bill?.late_fee || 0);
     const currentCommonFee = parseInt(commonFee || 0);
-    const currentLateFee = parseInt(lateFee || 0);
 
     if (currentCommonFee < prevCommonFee) {
       alert('ค่าส่วนกลางครั้งนี้ต้องไม่น้อยกว่าครั้งก่อน');
-      return;
-    }
-
-    if (currentLateFee < prevLateFee) {
-      alert('ค่าปรับครั้งนี้ต้องไม่น้อยกว่าครั้งก่อน');
       return;
     }
 
@@ -395,8 +388,8 @@ export default function Page() {
     setSelectedDay('');
   }, [selectedMonth]);
 
-  
-////////////////////////////////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////////////////////////////////
   const pageContent = {
 
     page1: (
@@ -446,7 +439,7 @@ export default function Page() {
             )
           })}
         </div>
-          
+
         <div style={{ marginTop: '20px' }}>
           {Array.from({ length: totalPages }, (_, i) => (
             <button

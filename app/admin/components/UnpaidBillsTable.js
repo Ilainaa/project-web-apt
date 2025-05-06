@@ -40,8 +40,7 @@ export default function UnpaidBillsTable({ onPaymentStatusUpdate }) {
   }, [refreshCounter])
 
   const filteredBills = unpaidBills.filter(bill =>
-    bill.room_num.toString().includes(searchTerm) ||
-    (userMap[bill.room_num] && userMap[bill.room_num].toLowerCase().includes(searchTerm.toLowerCase()))
+    bill.room_num.toString().includes(searchTerm) 
   )
 
   const indexOfLastItem = currentPage * itemsPerPage

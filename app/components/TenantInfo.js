@@ -28,11 +28,7 @@ export default function TenantInfo() {
       const updateBillRes = await fetch(`/api/main/historybill/${bill.historybill_id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          status_bill: "ชำระแล้ว",
-          common_fee: bill.common_fee,
-          late_fee: bill.late_fee
-        })
+        body: JSON.stringify({ status_bill: "ชำระแล้ว"})
       })
 
       if (updateRoomRes.ok && updateBillRes.ok) { //แจ้งเตือน
